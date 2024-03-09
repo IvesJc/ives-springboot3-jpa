@@ -19,7 +19,7 @@ public class Category implements Serializable {
 
     // mappedBy = "Colocar a coleção correspondente"
     @ManyToMany(mappedBy = "categories")
-    // JsonIgnore = Evita o loop 
+    // JsonIgnore = Evita o loop
     @JsonIgnore
     private Set<Product> products = new HashSet<>();
 

@@ -1,5 +1,6 @@
 package com.educandoweb.course.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.DependsOn;
 
@@ -17,6 +18,7 @@ public class Payment implements Serializable {
     private Instant moment;
 
     @OneToOne
+    @JsonIgnore
     @MapsId
     // MapsId = Classe dependente recebe
     private Order order;

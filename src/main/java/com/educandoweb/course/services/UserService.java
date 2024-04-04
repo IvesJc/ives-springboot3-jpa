@@ -19,38 +19,44 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public List<User> findAll(){
+    public List<User> findAll() {
         return repository.findAll();
     }
 
-    public User findById(Long id){
+    public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User obj){
+    public User insert(User obj) {
         return repository.save(obj);
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         try {
             repository.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(id);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DataBaseException(e.getMessage());
         }
     }
 
-    public User update (Long id, User user){
-        Optional<User> optionalUser = repository.findById(id);
-        if (optionalUser.isPresent()){
-            User newUser = optionalUser.get();
-            newUser.setName(user.getName());
-            newUser.setEmail(user.getEmail());
-            newUser.setFone(user.getFone());
-            return repository.save(newUser);
+    public User update(Long id, User user) {
+        try {
+            Optional<User> optionalUser = repository.findById(id);
+            if (optionalUser.isPresent()) {
+                User newUser = optionalUser.get();
+                newUser.setName(user.getName());
+                newUser.setEmail(user.getEmail());
+                newUser.setFone(user.getFone());
+                return repository.save(newUser);
+            }
+            throw new EntityNotFoundException();
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
         }
-        throw new EntityNotFoundException();
+
+
     }
 }
